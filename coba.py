@@ -13,14 +13,20 @@ y_train = df.iloc[0:27455, 0].values
 
 #print(x_train[0])
 #print(y_train[4])
+
 feature, hog_img = hog(x_train[1].reshape(28,28), orientations=9, pixels_per_cell=(8, 8), cells_per_block=(2,2), visualize=True, block_norm='L2')
 
-plt.bar(list(range(feature.shape[0])), feature)
+#plt.bar(list(range(feature.shape[0])), feature)
 
 #print(feature.shape)
 #plt.imshow(x_train[4].reshape(28,28), cmap='gray')
-plt.show()
+#plt.show()
 
+n_dims = feature.shape[0]
+#print(n_dims)
+
+n_samples = x_train.shape[0]
+print(n_samples)
 '''
 x_test = df_test.iloc[0:7172, 1:785].values
 y_test = df_test.iloc[0:7172,0].values
