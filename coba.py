@@ -6,6 +6,9 @@ from sklearn import datasets
 from sklearn.svm import SVC
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
+from mlxtend.plotting import plot_confusion_matrix
+
+
 
 data_train = pd.read_csv('../archive/sign_mnist_train.csv')
 data_test = pd.read_csv('../archive/sign_mnist_test.csv')
@@ -17,17 +20,8 @@ image_test = data_test.iloc[0:7172, 1:785].values
 label_test = data_test.iloc[0:7172,0].values
 
 
-#Orientations = 9, pixels_per_cell = (8, 8), cells_per_block = (2, 2), block_norm = L2
 feature, hog_img = hog(image_train[1].reshape(28,28), orientations=9, pixels_per_cell=(8, 8), cells_per_block=(2,2), visualize=True, block_norm='L2')
 
-#Orientations = 7, pixels_per_cell = (8, 8), cells_per_block = (2, 2), block_norm = L2
-#feature2, hog_img2 = hog(image_train[1].reshape(28,28), orientations=7, pixels_per_cell=(8, 8), cells_per_block=(2,2), visualize=True, block_norm='L2')
-
-#Orientations = 9, pixels_per_cell = (4, 4), cells_per_block = (2, 2), block_norm = L2-Hys
-#feature3, hog_img3 = hog(image_train[1].reshape(28,28), orientations=9, pixels_per_cell=(4, 4), cells_per_block=(2,2), visualize=True, block_norm='L2-Hys')
-
-#Orientations = 9, pixels_per_cell = (8, 8), cells_per_block = (4, 4), block_norm = L2-Hys
-#feature4, hog_img4 = hog(image_train[1].reshape(28,28), orientations=9, pixels_per_cell=(8, 8), cells_per_block=(4,4), visualize=True, block_norm='L2-Hys')
 
 #plt.bar(list(range(feature.shape[0])), feature)
 #print(feature.shape)
@@ -61,11 +55,12 @@ for i in range(n_samples):
     y_train[i] = label_train[i]
 
 
+
+
 label_enc = LabelEncoder()
 y_train = label_enc.fit_transform(label_train)
-#label_test = label_enc.fit_transform(label_test)
+label_test = label_enc.fit_transform(label_test)
 
-#print(y_train[0])
 
 
 
@@ -73,6 +68,7 @@ classifier = SVC(decision_function_shape='ovr')
 classifier.fit(X_train, y_train)
 
 n_samples = image_test.shape[0]
+
 X_test, y_test = datasets.make_classification(n_samples=n_samples, n_features=n_dims)
 
 
@@ -80,21 +76,55 @@ for i in range(n_samples):
     X_test[i], _ = hog(image_test[i].reshape(28,28), orientations=9, pixels_per_cell=(8, 8), cells_per_block=(2,2), visualize=True, block_norm='L2')
     y_test[i] = label_test[i]
     
-plt.imshow(image_test[0].reshape(28,28), cmap='gray')
 
-#print("yey")
-plt.show()
-'''
-y_pred = classifier.predict(image_test)
+y_train_ = label_enc.fit_transform(y_test)
 
-acc = accuracy_score(label_test,y_pred)
-f1 = f1_score(label_test,y_pred,average='micro')
+
+y_pred = classifier.predict(X_test)
+
+#print("label tes", y_test)
+#print("label pred", y_pred)
+
+
+
+
+
+out_one_hot = classifier.predict(X_test[20].reshape(1, n_dims))
+
+
+
+
+
 cm = confusion_matrix(label_test,y_pred)
 
-print(cm)
-print(f1)
-print(acc)
-'''
+
+
+class_names = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9','10','11','12','13','14','15','16','17','18','19','20','21','22','23']
+
+from sklearn.metrics import precision_score
+precision = precision_score(y_test, y_pred, average=None)
+print("precision", precision)
+
+from sklearn.metrics import recall_score
+recall = recall_score(y_test, y_pred, average=None)
+print("recall",recall)
+
+from sklearn.metrics import accuracy_score
+accuracy = accuracy_score(y_test, y_pred)
+print("accuracy", accuracy)
+
+
+f1 = f1_score(label_test,y_pred,average='macro')
+print("f1",f1)
+
+
+fig, ax = plot_confusion_matrix(conf_mat=cm, class_names = class_names)
+
+#plt.imshow(image_test[2].reshape(28,28), cmap='gray')
+plt.show()
+
+
+
 
 
 
