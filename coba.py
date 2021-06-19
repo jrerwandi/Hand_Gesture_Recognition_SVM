@@ -20,7 +20,7 @@ image_test = data_test.iloc[0:7172, 1:785].values
 label_test = data_test.iloc[0:7172,0].values
 
 
-feature, hog_img = hog(image_train[1].reshape(28,28), orientations=7, pixels_per_cell=(8, 8), cells_per_block=(2,2), visualize=True, block_norm='L2')
+feature, hog_img = hog(image_train[1].reshape(28,28), orientations=9, pixels_per_cell=(4, 4), cells_per_block=(2,2), visualize=True, block_norm='L2-Hys')
 
 
 #plt.bar(list(range(feature.shape[0])), feature)
@@ -51,7 +51,7 @@ X_train, y_train = datasets.make_classification(n_samples=n_samples, n_features=
 
 
 for i in range(n_samples):
-    X_train[i], _ = hog(image_train[i].reshape(28,28), orientations=7, pixels_per_cell=(8, 8), cells_per_block=(2,2), visualize=True, block_norm='L2')
+    X_train[i], _ = hog(image_train[i].reshape(28,28), orientations=9, pixels_per_cell=(4, 4), cells_per_block=(2,2), visualize=True, block_norm='L2-Hys')
     y_train[i] = label_train[i]
 
 
@@ -73,7 +73,7 @@ X_test, y_test = datasets.make_classification(n_samples=n_samples, n_features=n_
 
 
 for i in range(n_samples):
-    X_test[i], _ = hog(image_test[i].reshape(28,28), orientations=7, pixels_per_cell=(8, 8), cells_per_block=(2,2), visualize=True, block_norm='L2')
+    X_test[i], _ = hog(image_test[i].reshape(28,28), orientations=9, pixels_per_cell=(4, 4), cells_per_block=(2,2), visualize=True, block_norm='L2-Hys')
     y_test[i] = label_test[i]
     
 
@@ -100,7 +100,7 @@ out_one_hot = classifier.predict(X_test[14].reshape(1, n_dims))
 
 
 cm = confusion_matrix(label_test,y_pred)
-
+print(cm)
 
 
 class_names = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9','10','11','12','13','14','15','16','17','18','19','20','21','22','23']
