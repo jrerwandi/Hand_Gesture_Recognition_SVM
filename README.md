@@ -1,4 +1,7 @@
 # Hand_Gesture_Recognition_SVM
+Pada tugas ini Anda dituntut untuk menyelesaikan problem pengenalan bahasa isyarat menggunakan tangan (sign language). 
+Dataset yang akan digunakan pada tugas ini tersedia pada link berikut ini https://www.kaggle.com/datamunge/sign-language-mnist.
+Pada tugas kali ini, gunakan pengenalan menggunakan HOG feature. jenis classifier Support Vector Machine (SVM).
 
 Lakukan percobaan dengan memvariasikan parameter HOG seperti berikut:
 
